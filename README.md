@@ -4,13 +4,15 @@
 实现课程任务列表界面与可复用的 `TaskCard` 组件，
 并演示 `data class` 与 Kotlin 空安全在 UI 数据中的作用。
 
+仓库地址：https://github.com/liuhaolh6/Mobile-Application-Development
+
 ---
 
 ## 一、实验目标对应关系
 
 | 实验目标 | 实现位置 |
 |---|---|
-| 环境验证（SDK / 模拟器或真机） | `build.bat`、本文档第四节 |
+| 环境验证（SDK / 模拟器或真机） | `build.bat`、本文档第二节 |
 | 创建 Compose 项目并能运行 | 整个工程，入口 `MainActivity` |
 | 至少 3 种基本组件 | `Lab1Screen.kt`（Scaffold / TopAppBar / LazyColumn / Card / Row / Column / Box / Text） |
 | 可复用 TaskCard | `TaskCard.kt` |
@@ -18,7 +20,26 @@
 
 ---
 
-## 二、工程结构
+## 二、克隆与构建
+
+```batch
+git clone https://github.com/liuhaolh6/Mobile-Application-Development.git
+cd Mobile-Application-Development
+
+build.bat assembleDebug          :: 编译，产出 app/build/outputs/apk/debug/app-debug.apk
+build.bat testDebugUnitTest      :: 运行单元测试（6 个用例）
+build.bat installDebug           :: 安装到模拟器/真机
+```
+
+首次构建前请确认 `local.properties` 中的 `sdk.dir` 指向本机 SDK：
+
+```properties
+sdk.dir=D\:\\sdk
+```
+
+---
+
+## 三、工程结构
 
 ```
 lab1-android/
@@ -39,13 +60,15 @@ lab1-android/
 ├── docs/
 │   ├── 实验1-实验报告.md
 │   └── screenshots/                             # 运行截图（按 README 命名）
+├── tools/
+│   └── fix-github-hosts.ps1                     # 清理 hosts 中过期的 GitHub IP 映射
 ├── build.bat                                    # 一键构建脚本
 └── gradle/libs.versions.toml                    # 依赖版本集中管理
 ```
 
 ---
 
-## 三、技术栈
+## 四、技术栈
 
 | 类别 | 选型 | 版本 |
 |---|---|---|
@@ -57,26 +80,14 @@ lab1-android/
 
 ---
 
-## 四、构建与运行
-
-```batch
-build.bat assembleDebug      :: 编译，产出 app/build/outputs/apk/debug/app-debug.apk
-build.bat installDebug       :: 安装到模拟器/真机
-build.bat testDebugUnitTest  :: 运行单元测试
-```
+## 五、构建说明
 
 `build.bat` 已内置 JDK、SDK 路径，并修正了中文路径导致的编码问题，
 无需手工配置环境变量。详见实验报告第五节故障记录。
 
-首次运行前请确认 `local.properties` 中的 `sdk.dir` 指向本机 SDK：
-
-```properties
-sdk.dir=D\:\\sdk
-```
-
 ---
 
-## 五、关键实现说明
+## 六、关键实现说明
 
 ### 1. 空安全：三步收敛，全程不用 `!!`
 
@@ -107,7 +118,7 @@ fun displayOwner(task: CourseTask): String =
 
 ---
 
-## 六、单元测试
+## 七、单元测试
 
 `CourseTaskTest` 覆盖 6 个用例，全部通过：
 
@@ -122,7 +133,7 @@ fun displayOwner(task: CourseTask): String =
 
 ---
 
-## 七、文档
+## 八、文档
 
 | 文件 | 说明 |
 |---|---|
