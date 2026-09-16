@@ -18,6 +18,18 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <!-- 实验2 独立入口：演示 LazyColumn 列表与页面导航，与实验1 互不影响 -->
+        <activity
+            android:name=".lab2.Lab2Activity"
+            android:exported="true"
+            android:label="实验2 · 列表与导航"
+            android:theme="@style/Theme.Lab1">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
     </application>
 
 </manifest>
