@@ -24,11 +24,24 @@
 | `07-lab2-detail-task2.png` | 详情页首行显示「任务 id = 2」 | 在首页点第 2 条卡片后截图 |
 | `08-lab2-back-to-home.png` | 点返回箭头后回到首页 | 在详情页点左上角 ← 后截图 |
 | `09-lab2-hundred-scroll.png` | 100 条数据滚动中，卡片无错位 | 把 `Lab2Activity` 里改成 `CurriculumData.hundred`，滚动后截图 |
-| `10-lab2-swipe-back.png` | 系统返回手势也能回退 | 在详情页从屏幕左缘右滑后截图 |
+| `10-lab2-swipe-back.png` | 系统返回手势也能回退 | 在详情页从屏幕左缘右滑后截图（**需先切到手势导航**，见下方提示） |
 
 > `06` 与 `09` 需要临时改数据源。切换只需要动 `Lab2Activity.kt` 一处：
 > `Lab2NavHost(tasks = CurriculumData.normal)` → 换成 `.empty` 或 `.hundred`，
 > 截图完成后记得改回 `.normal`。
+>
+> **`10` 的前提：系统必须是手势导航。** 新建 AVD 默认是「三键导航」
+> （底部有 ◀ ● ■），此时屏幕左缘没有返回手势，怎么滑都不会回退 ——
+> 这不是代码问题。切换方式二选一：
+>
+> ```batch
+> :: 命令行切换后立即生效，无需重启模拟器
+> adb shell cmd overlay enable com.android.internal.systemui.navbar.gestural
+> :: 用 [x] 确认已启用
+> adb shell cmd overlay list | findstr navbar
+> ```
+>
+> 或在模拟器里：设置 → 系统 → 手势 → 系统导航方式 → 选手势导航。
 
 ---
 
@@ -82,6 +95,23 @@ adb exec-out screencap -p > 04-lab1-screen.png
 
 > **必须用 `exec-out`**：`adb shell screencap -p > x.png` 在 Windows 上会因换行符转换把
 > PNG 二进制流破坏成无法打开的图片，这是常见坑。
+
+### 方式四：adb 精确点击（复现实验2 的跳转流程）
+
+若要用命令行完整走一遍「首页 → 详情 → 返回」，需要点中卡片的**真实坐标**。
+本机 720×1184 分辨率下，三张卡片的可点击区域（`uiautomator dump` 实测）为：
+
+| 目标 | bounds | 点击坐标 |
+|---|---|---|
+| 第 1 张卡片（id=1） | `[24,259][696,403]` | `adb shell input tap 360 331` |
+| 第 2 张卡片（id=2） | `[24,419][696,563]` | `adb shell input tap 360 491` |
+| 第 3 张卡片（id=3） | `[24,579][696,723]` | `adb shell input tap 360 651` |
+| 详情页返回箭头 | 左上角 | `adb shell input tap 55 112` |
+
+> **不要凭截图目测坐标**：卡片间距与内边距会让肉眼估算偏出一整张卡片，
+> 结果是「点第 2 张却打开了第 3 张」。用
+> `adb shell uiautomator dump /sdcard/ui.xml && adb pull /sdcard/ui.xml .`
+> 读出 `clickable="true"` 节点的 `bounds` 才可靠。
 
 ## 四、预览面板截图
 
